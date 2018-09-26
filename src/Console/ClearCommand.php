@@ -2,7 +2,6 @@
 
 namespace Ludo237\LogsManager\Console;
 
-use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -11,7 +10,7 @@ use Symfony\Component\Finder\SplFileInfo;
  *
  * @package Ludo237\LogsManager\Console
  */
-class ClearCommand extends Command
+final class ClearCommand extends BaseCommand
 {
     /**
      * The console command name.
@@ -27,11 +26,12 @@ class ClearCommand extends Command
      */
     protected $description = "Clear the logs located in storage/logs folder";
     
-    /** @var string */
-    private $storage_path;
-    
-    /** @var \Illuminate\Support\Collection */
-    private $logs;
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'logs:clear {--F|force : Force the operation to run when in production}';
     
     /**
      * Create a new command instance.
@@ -40,9 +40,9 @@ class ClearCommand extends Command
     {
         parent::__construct();
         
-        $this->storage_path = storage_path("logs");
+        $this->storagePath = storage_path("logs");
         
-        $this->logs = collect(File::files($this->storage_path));
+        $this->logs = collect(File::files($this->storagePath));
     }
     
     /**
@@ -52,24 +52,20 @@ class ClearCommand extends Command
      */
     public function handle()
     {
-        if ($this->logs->isEmpty()) {
-            $this->warn("Logs folder is empty");
-            
-            return;
-        }
-        
-        if (!$this->confirm("There are {$this->logs->count()} files, do you want to remove them?")) {
-            $this->performCleanUp();
-        } else {
-            $this->line("Cleanup aborted!");
-        }
+        $this->checkLogsPresence();
+        $this->askForConfirmation();
+        $this->performCleanUp();
     }
     
     private function performCleanUp()
     {
+        $countBefore = $this->logs->count();
+        
         $this->logs->each(function (SplFileInfo $file) {
-            $this->info("Removing {$file->getFilename()}....");
+            $this->info("Removing: {$file->getFilename()}");
             File::delete($file->getRealPath());
         });
+        
+        $this->info("{$countBefore} files have been removed!");
     }
 }
