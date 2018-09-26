@@ -1,0 +1,53 @@
+{
+    "name": "ludo237/laravel-logs-manager",
+    "description": "Set of Artisan commands to handler the logs folder",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Claudio Ludovico",
+            "email": "ludo237@outlook.com"
+        }
+    ],
+    "homepage": "https://github.com/ludo237/laravel-logs-manager",
+    "keywords": [
+        "laravel",
+        "storage",
+        "logs",
+        "artisan",
+        "cli",
+        "laravel-package",
+        "open-source"
+    ],
+    "require": {
+        "php": "^7.2",
+        "illuminate/support": "5.6.x|5.7.x"
+    },
+    "require-dev": {
+        "php": "^7.2",
+        "laravel/framework": "5.6.x|5.7.x",
+        "phpunit/phpunit": "^7.3",
+        "orchestra/testbench": "^3.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ludo237\\LogsManager\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ludo237\\LogsManager\\Tests\\": "tests"
+        }
+    },
+    "minimum-stability": "stable",
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ludo237\\LogsManager\\LogsManagerServiceProvider"
+            ],
+            "aliases": {}
+        }
+    }
+}
