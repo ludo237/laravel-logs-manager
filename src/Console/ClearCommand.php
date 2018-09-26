@@ -3,7 +3,6 @@
 namespace Ludo237\LogsManager\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -31,6 +30,9 @@ class ClearCommand extends Command
     /** @var string */
     private $storage_path;
     
+    /** @var \Illuminate\Support\Collection */
+    private $logs;
+    
     /**
      * Create a new command instance.
      */
@@ -39,6 +41,8 @@ class ClearCommand extends Command
         parent::__construct();
         
         $this->storage_path = storage_path("logs");
+        
+        $this->logs = collect(File::files($this->storage_path));
     }
     
     /**
@@ -48,29 +52,22 @@ class ClearCommand extends Command
      */
     public function handle()
     {
-        $logs = collect(File::files($this->storage_path));
-        
-        if ($logs->isEmpty()) {
+        if ($this->logs->isEmpty()) {
             $this->warn("Logs folder is empty");
             
             return;
         }
         
-        if ($this->confirm("There are {$logs->count()} files, do you want to remove them?")) {
-            $this->performCleanUp($logs);
-            
-            return;
+        if (!$this->confirm("There are {$this->logs->count()} files, do you want to remove them?")) {
+            $this->performCleanUp();
+        } else {
+            $this->line("Cleanup aborted!");
         }
-        
-        $this->line("Cleanup aborted!");
     }
     
-    /**
-     * @param \Illuminate\Support\Collection $logs
-     */
-    private function performCleanUp(Collection $logs)
+    private function performCleanUp()
     {
-        $logs->each(function (SplFileInfo $file) {
+        $this->logs->each(function (SplFileInfo $file) {
             $this->info("Removing {$file->getFilename()}....");
             File::delete($file->getRealPath());
         });
