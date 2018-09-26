@@ -31,7 +31,7 @@ final class ClearCommand extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'logs:clear {--F|force : Force the operation to run when in production}';
+    protected $signature = 'logs:clear {--F|force : Force the operation to run without confirmation}';
     
     /**
      * Create a new command instance.
