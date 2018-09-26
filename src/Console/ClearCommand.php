@@ -2,6 +2,7 @@
 
 namespace Ludo237\LogsManager\Console;
 
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -31,18 +32,19 @@ final class ClearCommand extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'logs:clear {--F|force : Force the operation to run without confirmation}';
+    protected $signature = "logs:clear {--F|force : Force the operation to run without confirmation}";
     
     /**
      * Create a new command instance.
+     *
+     * @param \Illuminate\Filesystem\Filesystem $customStoragePath
      */
-    public function __construct()
+    public function __construct(?Filesystem $customStoragePath)
     {
         parent::__construct();
         
-        $this->storagePath = storage_path("logs");
-        
-        $this->logs = collect(File::files($this->storagePath));
+        $this->setStoragePath($customStoragePath);
+        $this->collectLogsFile();
     }
     
     /**
@@ -50,14 +52,17 @@ final class ClearCommand extends BaseCommand
      *
      * @return void
      */
-    public function handle()
+    public function handle() : void
     {
         $this->checkLogsPresence();
         $this->askForConfirmation();
         $this->performCleanUp();
     }
     
-    private function performCleanUp()
+    /**
+     * @return void
+     */
+    private function performCleanUp() : void
     {
         $countBefore = $this->logs->count();
         
