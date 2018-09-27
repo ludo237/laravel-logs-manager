@@ -3,6 +3,7 @@
 namespace Ludo237\LogsManager;
 
 use Illuminate\Support\ServiceProvider;
+use Ludo237\LogsManager\Console\ArchiveCommand;
 use Ludo237\LogsManager\Console\ClearCommand;
 use Ludo237\LogsManager\Console\DummyCommand;
 
@@ -35,6 +36,7 @@ final class LogsManagerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerArchiveCommand();
         $this->registerClearCommand();
         $this->registerDummyCommand();
     }
@@ -47,6 +49,20 @@ final class LogsManagerServiceProvider extends ServiceProvider
     public function provides()
     {
         return ["command.log"];
+    }
+    
+    /**
+     * Register the logs:archive command
+     *
+     * @return void
+     */
+    public function registerArchiveCommand() : void
+    {
+        $this->app->singleton("command.log.archive", function () {
+            return new ArchiveCommand();
+        });
+        
+        $this->commands("command.log.archive");
     }
     
     /**
@@ -73,7 +89,7 @@ final class LogsManagerServiceProvider extends ServiceProvider
         $this->app->singleton("command.log.dummy", function () {
             return new DummyCommand();
         });
-    
+        
         $this->commands("command.log.dummy");
     }
 }
