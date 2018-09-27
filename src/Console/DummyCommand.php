@@ -58,7 +58,7 @@ final class DummyCommand extends BaseCommand
         
         for ($i = 0; $i < $quantity; $i++) {
             $logFileName = "{$baseFileName}_{$i}.log";
-            File::put("{$this->storagePath}/{$logFileName}", "Dummy log file {$i}");
+            File::put("{$this->storagePath}/{$logFileName}", "Dummy log file number {$i}");
         }
         
         if ($baseFileName === "laravel_dummy_log") {
