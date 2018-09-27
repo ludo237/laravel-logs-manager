@@ -18,7 +18,7 @@ final class ClearCommand extends BaseCommand
      *
      * @var string
      */
-    protected $name = "logs:clear";
+    protected $name = "log:clear";
     
     /**
      * The console command description.
@@ -32,7 +32,7 @@ final class ClearCommand extends BaseCommand
      *
      * @var string
      */
-    protected $signature = "logs:clear {--F|force : Force the operation to run without confirmation}";
+    protected $signature = "log:clear {--F|force : Force the operation to run without confirmation}";
     
     /**
      * Create a new command instance.

@@ -13,7 +13,7 @@ final class ClearCommandTest extends TestCase
     {
         $this->populateLogsFolder();
         
-        $this->artisan("logs:clear")
+        $this->artisan("log:clear")
             ->expectsQuestion("There are 5 files, do you want to remove them?", true)
             ->expectsOutput("Removing: laravel_foobar_1.log")
             ->expectsOutput("Removing: laravel_foobar_2.log")
@@ -29,7 +29,7 @@ final class ClearCommandTest extends TestCase
     /** @test */
     public function it_displays_a_message_if_the_log_folder_is_empty()
     {
-        $this->artisan("logs:clear")
+        $this->artisan("log:clear")
             ->expectsOutput("Logs folder is empty")
             ->assertExitCode(0);
     }
@@ -39,7 +39,7 @@ final class ClearCommandTest extends TestCase
     {
         $this->populateLogsFolder();
 
-        $this->artisan("logs:clear")
+        $this->artisan("log:clear")
             ->expectsQuestion("There are 5 files, do you want to remove them?", false)
             ->assertExitCode(0);
     
