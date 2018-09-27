@@ -12,6 +12,8 @@ use Orchestra\Testbench\TestCase as OTestCase;
  */
 abstract class TestCase extends OTestCase
 {
+    use Assertions;
+    
     protected function tearDown()
     {
         $this->clearLogsFolder();
@@ -22,17 +24,6 @@ abstract class TestCase extends OTestCase
     protected function getPackageProviders($app)
     {
         return [LogsManagerServiceProvider::class];
-    }
-    
-    /**
-     * Wrapper to assert the count of files inside the storage folder
-     *
-     * @param int $count
-     */
-    protected function assertLogsFolderFilesCount(int $count = 5) : void
-    {
-        $files = File::files(storage_path("logs"));
-        $this->assertCount($count, $files);
     }
     
     /**
