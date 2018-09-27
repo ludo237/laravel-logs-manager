@@ -4,6 +4,7 @@ namespace Ludo237\LogsManager;
 
 use Illuminate\Support\ServiceProvider;
 use Ludo237\LogsManager\Console\ClearCommand;
+use Ludo237\LogsManager\Console\DummyCommand;
 
 /**
  * Class LogsManagerServiceProvider
@@ -34,12 +35,8 @@ final class LogsManagerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Register the service the package provides.
-        $this->app->singleton("command.logs.clear", function () {
-                return new ClearCommand();
-        });
-
-        $this->commands("command.logs.clear");
+        $this->registerClearCommand();
+        $this->registerDummyCommand();
     }
     
     /**
@@ -49,6 +46,34 @@ final class LogsManagerServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ["command.logs"];
+        return ["command.log"];
+    }
+    
+    /**
+     * Register the logs:clear command
+     *
+     * @return void
+     */
+    private function registerClearCommand() : void
+    {
+        $this->app->singleton("command.log.clear", function () {
+            return new ClearCommand();
+        });
+        
+        $this->commands("command.log.clear");
+    }
+    
+    /**
+     * Register the logs:dummy command
+     *
+     * @return void
+     */
+    private function registerDummyCommand() : void
+    {
+        $this->app->singleton("command.log.dummy", function () {
+            return new DummyCommand();
+        });
+    
+        $this->commands("command.log.dummy");
     }
 }
