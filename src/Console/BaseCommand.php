@@ -49,31 +49,4 @@ abstract class BaseCommand extends Command
     {
         $this->logs = collect(File::files($this->storagePath));
     }
-    
-    /**
-     * Determine if the specified folder has logs in it
-     * if not, the command will exit
-     *
-     * @return void
-     */
-    protected function checkLogsPresence() : void
-    {
-        if ($this->logs->isEmpty()) {
-            $this->warn("Logs folder is empty");
-            
-            exit;
-        }
-    }
-    
-    /**
-     * If a command need the confirmation this method will allow that
-     *
-     * @return void
-     */
-    protected function askForConfirmation() : void
-    {
-        if (!$this->confirmToProceed("There are {$this->logs->count()} files, do you want to remove them?")) {
-            exit;
-        }
-    }
 }

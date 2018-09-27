@@ -39,10 +39,10 @@ final class ClearCommand extends BaseCommand
      *
      * @param \Illuminate\Filesystem\Filesystem $customStoragePath
      */
-    public function __construct(?Filesystem $customStoragePath)
+    public function __construct(?Filesystem $customStoragePath = null)
     {
         parent::__construct();
-        
+     
         $this->setStoragePath($customStoragePath);
         $this->collectLogsFile();
     }
@@ -54,8 +54,16 @@ final class ClearCommand extends BaseCommand
      */
     public function handle() : void
     {
-        $this->checkLogsPresence();
-        $this->askForConfirmation();
+        if ($this->logs->isEmpty()) {
+            $this->warn("Logs folder is empty");
+        
+            return;
+        }
+    
+        if (!$this->confirm("There are {$this->logs->count()} files, do you want to remove them?")) {
+            return;
+        }
+        
         $this->performCleanUp();
     }
     
