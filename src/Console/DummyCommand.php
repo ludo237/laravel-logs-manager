@@ -61,6 +61,10 @@ final class DummyCommand extends BaseCommand
             File::put("{$this->storagePath}/{$logFileName}", "Dummy log file {$i}");
         }
         
-        $this->info("{$quantity} dummy logs file have been created");
+        if ($baseFileName === "laravel_dummy_log") {
+            $this->info("{$quantity} dummy files have been created");
+        } else {
+            $this->info("{$quantity} dummy files named {$baseFileName} have been created");
+        }
     }
 }
