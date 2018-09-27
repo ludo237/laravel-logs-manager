@@ -8,6 +8,13 @@ namespace Ludo237\LogsManager\Tests;
  */
 final class ClearCommandTest extends TestCase
 {
+    protected function tearDown()
+    {
+        $this->clearLogsFolder();
+        
+        parent::tearDown();
+    }
+    
     /** @test */
     public function it_clears_the_log_folder()
     {

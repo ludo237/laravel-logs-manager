@@ -41,4 +41,12 @@ abstract class TestCase extends OTestCase
             File::put(storage_path("logs/laravel_dummy_log_{$i}.log"), "Dummy log data");
         }
     }
+    
+    /**
+     * @return void
+     */
+    protected function clearLogsFolder() : void
+    {
+        File::cleanDirectory(storage_path("logs"));
+    }
 }
