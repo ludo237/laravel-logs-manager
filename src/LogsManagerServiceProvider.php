@@ -35,7 +35,7 @@ final class LogsManagerServiceProvider extends ServiceProvider
     public function register()
     {
         // Register the service the package provides.
-        $this->app->singleton("command.logs.clear", function ($app) {
+        $this->app->singleton("command.logs.clear", function () {
                 return new ClearCommand();
         });
 
