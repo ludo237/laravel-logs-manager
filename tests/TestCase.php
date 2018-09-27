@@ -12,6 +12,13 @@ use Orchestra\Testbench\TestCase as OTestCase;
  */
 abstract class TestCase extends OTestCase
 {
+    protected function tearDown()
+    {
+        $this->clearLogsFolder();
+        
+        parent::tearDown();
+    }
+    
     protected function getPackageProviders($app)
     {
         return [LogsManagerServiceProvider::class];
