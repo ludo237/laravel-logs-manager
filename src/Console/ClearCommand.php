@@ -33,7 +33,7 @@ final class ClearCommand extends BaseCommand
      * @var string
      */
     protected $signature = "log:clear
-                            {--F|force : Force the operation to run without confirmation}";
+                            {--f|force : Force the operation to run without confirmation}";
     
     /**
      * Create a new command instance.
@@ -43,7 +43,7 @@ final class ClearCommand extends BaseCommand
     public function __construct(?Filesystem $customStoragePath = null)
     {
         parent::__construct();
-     
+        
         $this->setStoragePath($customStoragePath);
         $this->collectLogsFile();
     }
@@ -57,15 +57,19 @@ final class ClearCommand extends BaseCommand
     {
         if ($this->logs->isEmpty()) {
             $this->warn("Logs folder is empty");
-        
-            return;
-        }
-    
-        if (!$this->confirm("There are {$this->logs->count()} files, do you want to remove them?")) {
+            
             return;
         }
         
-        $this->performCleanUp();
+        if ($this->option("force")) {
+            $this->performCleanUp();
+            
+            return;
+        }
+        
+        if ($this->confirm("There are {$this->logs->count()} files, do you want to remove them?")) {
+            $this->performCleanUp();
+        }
     }
     
     /**
