@@ -15,11 +15,11 @@ final class ClearCommandTest extends TestCase
         
         $this->artisan("log:clear")
             ->expectsQuestion("There are 5 files, do you want to remove them?", true)
+            ->expectsOutput("Removing: laravel_foobar_0.log")
             ->expectsOutput("Removing: laravel_foobar_1.log")
             ->expectsOutput("Removing: laravel_foobar_2.log")
             ->expectsOutput("Removing: laravel_foobar_3.log")
             ->expectsOutput("Removing: laravel_foobar_4.log")
-            ->expectsOutput("Removing: laravel_foobar_5.log")
             ->expectsOutput("5 files have been removed!")
             ->assertExitCode(0);
         
