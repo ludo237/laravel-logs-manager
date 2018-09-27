@@ -54,7 +54,8 @@ final class ArchiveCommand extends BaseCommand
         
         $this->signature = "log:archive
                             {name=logs_archive : The name of the archive}
-                            {--T|timestamp={$this->timestamp} : Include a timestamp in the name}";
+                            {--t|timestamp={$this->timestamp} : Include a timestamp in the name}
+                            {--rm|remove : Remove the current zip file inside storage/logs with the given name}";
         
         parent::__construct();
         
