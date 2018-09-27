@@ -38,7 +38,7 @@ abstract class TestCase extends OTestCase
     protected function populateLogsFolder(int $numberOfLogs = 5) : void
     {
         for ($i = 0; $i < $numberOfLogs; $i++) {
-            File::put(storage_path("logs/laravel_foobar_{$i}.log"), "Dummy log data");
+            File::put(storage_path("logs/laravel_dummy_log_{$i}.log"), "Dummy log data");
         }
     }
 }
