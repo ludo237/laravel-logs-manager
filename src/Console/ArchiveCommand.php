@@ -3,6 +3,7 @@
 namespace Ludo237\LogsManager\Console;
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\SplFileInfo;
 use ZipArchive;
 
@@ -55,7 +56,7 @@ final class ArchiveCommand extends BaseCommand
         $this->signature = "log:archive
                             {name=logs_archive : The name of the archive}
                             {--t|timestamp={$this->timestamp} : Include a timestamp in the name}
-                            {--rm|remove : Remove the current zip file inside storage/logs with the given name}";
+                            {--remove : Remove the current zip file inside storage/logs with the given name}";
         
         parent::__construct();
         
@@ -78,9 +79,29 @@ final class ArchiveCommand extends BaseCommand
             return;
         }
         
-        $zipName = $this->argument("name");
+        $zipName = $this->argument("name") . "_" . $this->timestamp;
+        $zipFilePath = "{$this->storagePath}/{$zipName}.zip";
         
-        if ($this->zipArchive->open("{$this->storagePath}/{$zipName}.zip", ZipArchive::CREATE)) {
+        if ($this->option("remove")) {
+            File::delete($zipFilePath);
+            
+            $this->info("Archive {$zipName} removed from {$this->storagePath}");
+            
+            return;
+        }
+        
+        if (File::exists($zipFilePath)) {
+            $this->error("An archive called {$zipName} already exists in {$this->storagePath}");
+            
+            return;
+        }
+        
+        $this->createZipArchive($zipName, $zipFilePath);
+    }
+    
+    private function createZipArchive(string $zipName, string $zipFilePath) : void
+    {
+        if ($this->zipArchive->open($zipFilePath, ZipArchive::CREATE)) {
             
             $this->info("{$zipName} is filling...");
             
