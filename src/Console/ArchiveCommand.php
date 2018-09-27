@@ -79,8 +79,8 @@ final class ArchiveCommand extends BaseCommand
             return;
         }
         
-        $zipName = $this->argument("name") . "_" . $this->timestamp;
-        $zipFilePath = "{$this->storagePath}/{$zipName}.zip";
+        $zipName = $this->argument("name") . "_" . $this->timestamp . ".zip";
+        $zipFilePath = "{$this->storagePath}/{$zipName}";
         
         if ($this->option("remove")) {
             File::delete($zipFilePath);
