@@ -1,6 +1,6 @@
 # Laravel Logs Manager
 
-Set of Artisan commands to handler the logs folder
+Set of Artisan commands to handle the logs folder
 
 ## Why
 
