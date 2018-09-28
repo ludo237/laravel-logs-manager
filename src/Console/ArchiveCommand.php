@@ -5,6 +5,7 @@ namespace Ludo237\LogsManager\Console;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use ZipArchive;
 
 /**
@@ -72,11 +73,7 @@ final class ArchiveCommand extends BaseCommand
      */
     public function handle() : void
     {
-        if ($this->logs->isEmpty()) {
-            $this->warn("Logs folder is empty");
-            
-            return;
-        }
+        $this->checkIfFolderIsEmpty();
         
         $zipName = $this->argument("name") . ".zip";
         $zipFilePath = "{$this->storagePath}/{$zipName}";

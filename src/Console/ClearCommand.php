@@ -52,14 +52,11 @@ final class ClearCommand extends BaseCommand
      * Execute the console command.
      *
      * @return void
+     * @throws \Ludo237\LogsManager\Exceptions\LogsFolderEmptyException
      */
     public function handle() : void
     {
-        if ($this->logs->isEmpty()) {
-            $this->warn("Logs folder is empty");
-            
-            return;
-        }
+        $this->checkIfFolderIsEmpty();
         
         if ($this->option("force")) {
             $this->performCleanUp();

@@ -2,6 +2,8 @@
 
 namespace Ludo237\LogsManager\Tests;
 
+use Ludo237\LogsManager\Exceptions\LogsFolderEmptyException;
+
 /**
  * Class ArchiveCommandTest
  * @package Ludo237\LogsManager\Tests
@@ -27,8 +29,9 @@ final class ArchiveCommandTest extends TestCase
     /** @test */
     public function it_displays_a_message_if_the_log_folder_is_empty()
     {
+        $this->expectException(LogsFolderEmptyException::class);
+        
         $this->artisan("log:archive")
-            ->expectsOutput("Logs folder is empty")
             ->assertExitCode(0);
         
         $this->assertLogsFolderDoesNotContainZip();

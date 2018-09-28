@@ -13,6 +13,8 @@ use Ludo237\LogsManager\Console\DummyCommand;
 trait RegisterConsoleCommands
 {
     /**
+     * An array of available commands
+     *
      * @var array
      */
     protected $commandsToBuild = [];
@@ -60,7 +62,7 @@ trait RegisterConsoleCommands
     }
     
     /**
-     * Register console commands
+     * Register all console commands
      */
     private function registerCommands() : void
     {
@@ -70,7 +72,7 @@ trait RegisterConsoleCommands
     }
     
     /**
-     * Build commands
+     * Build all console commands
      */
     private function buildCommands() : void
     {

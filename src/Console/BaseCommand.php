@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
+use Ludo237\LogsManager\Exceptions\LogsFolderEmptyException;
 
 /**
  * Class BaseCommand
@@ -48,5 +49,17 @@ abstract class BaseCommand extends Command
     protected function collectLogsFile() : void
     {
         $this->logs = collect(File::files($this->storagePath));
+    }
+    
+    /**
+     * Determine if the folder is empty or not
+     *
+     * @throws \Ludo237\LogsManager\Exceptions\LogsFolderEmptyException
+     */
+    protected function checkIfFolderIsEmpty() : void
+    {
+        if ($this->logs->isEmpty()) {
+            throw new LogsFolderEmptyException("Logs folder is empty");
+        }
     }
 }
