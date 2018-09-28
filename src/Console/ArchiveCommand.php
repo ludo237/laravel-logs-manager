@@ -2,10 +2,10 @@
 
 namespace Ludo237\LogsManager\Console;
 
+use Exception;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use ZipArchive;
 
 /**
@@ -36,11 +36,8 @@ final class ArchiveCommand extends BaseCommand
     protected $signature = "";
     
     /**
-     * @var \Illuminate\Support\Carbon
-     */
-    private $timestamp;
-    
-    /**
+     * Archive that will be created
+     *
      * @var \ZipArchive
      */
     private $zipArchive;
@@ -52,10 +49,10 @@ final class ArchiveCommand extends BaseCommand
      */
     public function __construct(?Filesystem $customStoragePath = null)
     {
-        $this->timestamp = now()->toDateString();
+        $timestamp = now()->toDateString();
         
         $this->signature = "log:archive
-                            {name=logs_archive_{$this->timestamp} : The name of the archive}
+                            {name=logs_archive_{$timestamp} : The name of the archive}
                             {--remove : Remove the current zip file inside storage/logs with the given name}";
         
         parent::__construct();
@@ -70,6 +67,7 @@ final class ArchiveCommand extends BaseCommand
      * Execute the console command.
      *
      * @return void
+     * @throws \Ludo237\LogsManager\Exceptions\LogsFolderEmptyException
      */
     public function handle() : void
     {
@@ -95,6 +93,13 @@ final class ArchiveCommand extends BaseCommand
         $this->createZipArchive($zipName, $zipFilePath);
     }
     
+    /**
+     * Core of the command where we actually create the archive
+     *
+     * @param string $zipName
+     * @param string $zipFilePath
+     * @throws \Exception
+     */
     private function createZipArchive(string $zipName, string $zipFilePath) : void
     {
         if ($this->zipArchive->open($zipFilePath, ZipArchive::CREATE)) {
@@ -110,6 +115,8 @@ final class ArchiveCommand extends BaseCommand
             $this->zipArchive->close();
             
             $this->info("{$zipName} created!");
+        } else {
+            throw new Exception("Cannot create {$zipName} archive right now");
         }
     }
 }

@@ -2,7 +2,10 @@
 
 namespace Ludo237\LogsManager\Tests;
 
+use Exception;
+use Ludo237\LogsManager\Console\ArchiveCommand;
 use Ludo237\LogsManager\Exceptions\LogsFolderEmptyException;
+use Mockery;
 
 /**
  * Class ArchiveCommandTest
@@ -54,27 +57,42 @@ final class ArchiveCommandTest extends TestCase
     public function it_accepts_a_name_for_customization()
     {
         $this->populateLogsFolder();
-    
+        
         $this->artisan("log:archive", ["name" => "foobar"])
             ->expectsOutput("foobar.zip is filling...")
             ->expectsOutput("Adding laravel_dummy_log_0.log to foobar.zip")
             ->expectsOutput("Adding laravel_dummy_log_4.log to foobar.zip")
             ->expectsOutput("foobar.zip created!")
             ->assertExitCode(0);
-    
+        
         $this->assertLogsFolderContainsZip("foobar.zip");
     }
-
+    
     /** @test */
     public function it_can_remove_an_archive()
     {
         $this->populateLogsFolder();
         $now = now()->toDateString();
         $path = storage_path("logs");
-    
+        
         $this->artisan("log:archive", ["--remove" => true])
             ->expectsOutput("Archive logs_archive_{$now}.zip removed from {$path}");
         
         $this->assertLogsFolderDoesNotContainZip();
+    }
+    
+    /** @test */
+    public function it_throws_an_exception_if_the_archive_is_not_create()
+    {
+        $this->expectException(Exception::class);
+        $this->populateLogsFolder();
+        
+        Mockery::mock(ArchiveCommand::class)
+            ->shouldReceive("createZipArchive")
+            ->once()
+            ->with("/tmp", "foobar");
+        
+        $this->artisan("log:archive")
+            ->assertExitCode(0);
     }
 }
