@@ -5,6 +5,7 @@ namespace Ludo237\LogsManager\Traits;
 use Ludo237\LogsManager\Console\ArchiveCommand;
 use Ludo237\LogsManager\Console\ClearCommand;
 use Ludo237\LogsManager\Console\DummyCommand;
+use Ludo237\LogsManager\Console\ListCommand;
 
 /**
  * Trait RegisterConsoleCommands
@@ -60,6 +61,20 @@ trait RegisterConsoleCommands
     
         array_push($this->commandsToBuild, "command.log.dummy");
     }
+
+    /**
+     * Register the logs:list command
+     *
+     * @return void
+     */
+    private function registerListCommand() : void
+    {
+        $this->app->singleton("command.log.list", function () {
+            return new ListCommand();
+        });
+    
+        array_push($this->commandsToBuild, "command.log.list");
+    }
     
     /**
      * Register all console commands
@@ -69,6 +84,7 @@ trait RegisterConsoleCommands
         $this->registerArchiveCommand();
         $this->registerClearCommand();
         $this->registerDummyCommand();
+        $this->registerListCommand();
     }
     
     /**
