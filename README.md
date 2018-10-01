@@ -15,7 +15,7 @@ and it's done if you run `php artisan` you will see a new set of commands
 
 ### Single Command Explanation (SCE)
 
-```
+```php
 php artisan log:archive [options] [--] [<name>]
 ```
 
@@ -28,7 +28,7 @@ date taken directly from Carbon using `now()->toDateString()`.
 The command also accepts a `--remove` options which means that it will try to delete the archive with the
 given name.
 
-```
+```php
 php artisan log:clear [options]
 ```
 
@@ -37,7 +37,7 @@ confirmation, the action is **irreversible**.
 
 If you pass the `--force` option to the command it won't ask for confirmation.
 
-```
+```php
 php artisan log:dummy [options] [--] [<name>]
 ```
 
@@ -45,6 +45,19 @@ This command is really useful when testing stuff and you need to populate the lo
 It accepts a `name` as an argument and by default every log will be called `laravel_dummy_log_{n}` with `{n}` 
 and incremental number. It also has an `--quantity` options which determines the number of dummy log that
 the command will create for you, by default is set to one.
+
+```php
+php artisan log:list
+```
+
+It shows all the logs in a fancy CLI table.
+
+```php
+php artisan log:remove [options]
+```
+
+It can remove a log by its name. It also accepts a `--all` option which basically mimics the `log:clear` logic by
+removing all the logs inside the selected storage folder
 
 ## How to contribute
 
