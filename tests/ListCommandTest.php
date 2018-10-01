@@ -10,7 +10,6 @@ use Ludo237\LogsManager\Exceptions\LogsFolderEmptyException;
  */
 final class ListCommandTest extends TestCase
 {
-    /** @test */
     public function it_shows_a_table_of_logs()
     {
         $this->markTestSkipped("Cannot test table output");
